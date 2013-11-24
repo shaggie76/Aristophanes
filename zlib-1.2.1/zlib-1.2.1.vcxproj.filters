@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Src">
+      <UniqueIdentifier>{cf884b16-0401-4b33-a8bb-9a54a56ac3d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Inc">
+      <UniqueIdentifier>{6a61f682-fd76-495d-88b4-0fb175bc9bb3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="adler32.c">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="compress.c">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="crc32.c">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="deflate.c">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="gzio.c">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="infback.c">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="inffast.c">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="inflate.c">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="inftrees.c">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="trees.c">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="uncompr.c">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="zutil.c">
+      <Filter>Src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="crc32.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="deflate.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inffast.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inffixed.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inflate.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inftrees.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="trees.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="zconf.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="zconf.in.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="zutil.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

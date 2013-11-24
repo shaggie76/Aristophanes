@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Src">
+      <UniqueIdentifier>{67a72820-bbb7-49c3-be3e-11254acdbbca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Inc">
+      <UniqueIdentifier>{b8e56163-39f7-480f-bedb-0905542cb32a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="chartables.c">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="get.c">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="maketables.c">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre.c">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="study.c">
+      <Filter>Src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="config.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="pcre.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

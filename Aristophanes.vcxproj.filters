@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Src">
+      <UniqueIdentifier>{da6dde50-ab90-463e-bdcf-c189a3ebe148}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Res">
+      <UniqueIdentifier>{b15c10ab-2db7-4286-9f48-c7056783605d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Src\Aristophanes.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\AristophanesPch.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\DependencyGraph.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\FileNode.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ID3LibEx.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Library.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Playlist.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Resources.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Str.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\StrayFiles.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Tag.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Src\AristophanesPch.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\DependencyGraph.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\FileNode.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ID3LibEx.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Library.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Resources.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Str.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\StrayFiles.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Tag.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Res\Resource.h">
+      <Filter>Res</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Res\Aristophanes.ico">
+      <Filter>Res</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Res\Aristophanes.rc">
+      <Filter>Res</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
