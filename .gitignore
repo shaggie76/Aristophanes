@@ -25,6 +25,8 @@
 *.opensdf
 *.unsuccessfulbuild
 *.wwdb
+*.opendb
+*.db
 ipch/
 debug/
 release/

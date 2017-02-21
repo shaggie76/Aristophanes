@@ -1305,11 +1305,13 @@ const TrackLinkNode& DependencyGraph::GetTrackLinkEx(const char* fileName)
 {
     TrackLinkNode node(fileName);
     
-    TrackLinkNodeSet::iterator f = mTrackLinkNodes.find(node);
-    
-    if(f != mTrackLinkNodes.end())
     {
-        return(*f);
+        TrackLinkNodeSet::iterator f = mTrackLinkNodes.find(node);
+    
+        if(f != mTrackLinkNodes.end())
+        {
+            return(*f);
+        }
     }
     
     // Do a case-insensitive search now:
