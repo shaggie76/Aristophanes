@@ -12,6 +12,7 @@ enum OriginalFormat
     OF_ASSORTED,
     OF_VINYL,
     OF_CD,
+    OF_MP3,
     OF_DVD
 };
 

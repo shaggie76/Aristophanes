@@ -11,8 +11,9 @@ static const char* GetFormatString(OriginalFormat of)
 {
     switch(of)
     {
-        case OF_CD:     return("CD");
         case OF_VINYL:  return("Vinyl");
+        case OF_CD:     return("CD");
+        case OF_MP3:    return("MP3");
         case OF_DVD:    return("DVD");
         default:        Assert(!"Unknown format!"); return("Somewhere");
     }
