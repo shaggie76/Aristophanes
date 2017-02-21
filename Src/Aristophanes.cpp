@@ -98,7 +98,12 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     
     std::vector<String> rootDirs;
     
-    if(DirExists("M:\\By Label"))
+    if(DirExists("C:\\Music"))
+    {
+        rootDirs.push_back("C:\\Music\\Glen's Music");
+        rootDirs.push_back("C:\\Music\\Erin's Music");
+    }
+    else if(DirExists("M:\\By Label"))
     {
         rootDirs.push_back("M:\\");
     }
