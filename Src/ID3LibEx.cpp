@@ -126,6 +126,68 @@ ID3_Frame* ID3_AddPublisher(ID3_Tag* tag, const char* text, bool replace)
     return frame;
 }
 
+char* ID3_GetComposer(const ID3_Tag* tag)
+{
+    char* sComposer = NULL;
+    if(NULL == tag)
+    {
+        return sComposer;
+    }
+
+    ID3_Frame* frame = tag->Find(ID3FID_COMPOSER);
+    if(frame != NULL)
+    {
+        sComposer = ID3_GetString(frame, ID3FN_TEXT);
+    }
+    return sComposer;
+}
+
+size_t ID3_RemoveComposer(ID3_Tag* tag)
+{
+    size_t num_removed = 0;
+    ID3_Frame* frame = NULL;
+
+    if(NULL == tag)
+    {
+        return num_removed;
+    }
+
+    frame = tag->Find(ID3FID_COMPOSER);
+
+    while(frame)
+    {
+        frame = tag->RemoveFrame(frame);
+        delete frame;
+        num_removed++;
+        frame = tag->Find(ID3FID_COMPOSER);
+    }
+
+    return num_removed;
+}
+
+ID3_Frame* ID3_AddComposer(ID3_Tag* tag, const char* text, bool replace)
+{
+    ID3_Frame* frame = NULL;
+    if(NULL != tag && NULL != text && strlen(text) > 0)
+    {
+        if(replace)
+        {
+            ID3_RemoveComposer(tag);
+        }
+        if(replace || tag->Find(ID3FID_COMPOSER) == NULL)
+        {
+            frame = new ID3_Frame(ID3FID_COMPOSER);
+            if(frame)
+            {
+                frame->Field(ID3FN_TEXT) = text;
+                tag->AttachFrame(frame);
+            }
+        }
+    }
+
+    return frame;
+}
+
 char* ID3_GetReleaseDate(const ID3_Tag* tag)
 {
     char* sReleaseDate = NULL;

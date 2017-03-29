@@ -37,6 +37,7 @@ void UpdateTag(const TrackNode& track)
 
     const char* artistName = ID3_GetArtist(&fileTag);
     const char* albumName = ID3_GetAlbum(&fileTag);
+    const char* composer = ID3_GetComposer(&fileTag);
     const char* title = ID3_GetTitle(&fileTag);
     const char* year = ID3_GetYear(&fileTag);
     const char* releaseDate = ID3_GetReleaseDate(&fileTag);
@@ -64,6 +65,12 @@ void UpdateTag(const TrackNode& track)
     if((artistName == NULL) || (Str::Compare(artistName, track.mTrackArtist) != 0))
     {
         ID3_AddArtist(&fileTag, track.mTrackArtist, true);
+        wasModified = true;
+    }
+
+    if((composer == NULL) || (Str::Compare(composer, track.mAlbumArtist) != 0))
+    {
+        ID3_AddComposer(&fileTag, track.mAlbumArtist, true);
         wasModified = true;
     }
 
@@ -115,12 +122,14 @@ void UpdateTag(const TrackNode& track)
         wasModified = true;
     }
 
-    if(comment != NULL)
+    if(comment != NULL) // note this only implies text comments but other comments include apple gain info
     {
-        ID3_RemoveComments(&fileTag);
-        wasModified = true;
+        if(ID3_RemoveComments(&fileTag) > 0)
+        {
+            wasModified = true;
+        }
     }
-    
+
     if(Str::Len(track.mGenre))
     {
         if(!genre || Str::Compare(track.mGenre, genre))

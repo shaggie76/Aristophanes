@@ -12,6 +12,10 @@ extern char* ID3_GetPublisher(const ID3_Tag* tag);
 extern size_t ID3_RemovePublisher(ID3_Tag* tag);
 extern ID3_Frame* ID3_AddPublisher(ID3_Tag* tag, const char* text, bool replace);
 
+extern char* ID3_GetComposer(const ID3_Tag* tag);
+extern size_t ID3_RemoveComposer(ID3_Tag* tag);
+extern ID3_Frame* ID3_AddComposer(ID3_Tag* tag, const char* text, bool replace);
+
 extern char* ID3_GetReleaseDate(const ID3_Tag* tag);
 extern size_t ID3_RemoveReleaseDate(ID3_Tag* tag);
 extern ID3_Frame* ID3_AddReleaseDate(ID3_Tag* tag, const char* text, bool replace);
