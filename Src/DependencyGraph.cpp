@@ -4,6 +4,16 @@
 #include "Tag.h"
 #include "iTunes.h"
 
+// Vestial stuff for FinalScratch
+// #define ENABLE_GROUPING
+
+// define ENABLE_PLAYLISTS
+
+// #define ENABLE_BY_ARTIST
+// #define ENABLE_BY_ALBUM
+
+#define SKIP_VINYL_LINKS
+
 static void CompileRE(pcre*& re, pcre_extra*& ree, const String& pattern, int options = 0)
 {
     const char *error;
@@ -262,13 +272,17 @@ static DWORD WINAPI ScanThreadProc(LPVOID voidArgs)
     
     String byLabel = args->mRootDir + "\\By Label";
     ScanDirectory(byLabel.c_str(), args->mWritePipe, 0.f, 0.25f);
-    
+
+#ifdef ENABLE_BY_ARTIST
     String byArtist = args->mRootDir + "\\By Artist";
     ScanDirectory(byArtist.c_str(), args->mWritePipe, 0.25f, 0.5f);
-    
+#endif
+
+#ifdef ENABLE_BY_ALBUM
     String byAlbum = args->mRootDir + "\\By Album";
     ScanDirectory(byAlbum.c_str(), args->mWritePipe, 0.5f, 0.75f);
-    
+#endif
+
     String byGenre = args->mRootDir + "\\By Genre";
     ScanDirectory(byGenre.c_str(), args->mWritePipe, 0.75f, 1.f);
     
@@ -302,7 +316,6 @@ void DependencyGraph::ScanDirectories()
     while(ReadFile(readPipe, &scanFile, sizeof(scanFile), &bytesRead, NULL))
     {
         Assert(bytesRead == sizeof(scanFile));
-
         ParseFile(scanFile);
     }
     
@@ -399,10 +412,23 @@ void DependencyGraph::ConnectGraph()
         }
 
         const TrackNode& track = *i;
-        
+
         AddPlaylistConnection(track);
+
+#ifdef  SKIP_VINYL_LINKS
+        if(track.mOriginalFormat == OF_VINYL)
+        {
+            continue; 
+        }
+#endif
+
+#ifdef ENABLE_BY_ARTIST
         AddArtistConnections(track);
+#endif
+
+#ifdef ENABLE_BY_ALBUM
         AddAlbumConnections(track);
+#endif
     }
     
     for(TrackLinkNodeSet::iterator i = mTrackLinkNodes.begin(); i != mTrackLinkNodes.end(); ++i)
@@ -424,7 +450,7 @@ void DependencyGraph::ConnectGraph()
         
         link.mSource = static_cast<const TrackNode*>(*f);
     }
-    
+
     for(PlaylistLinkNodeSet::iterator i = mPlaylistLinkNodes.begin(); i != mPlaylistLinkNodes.end(); ++i)
     {
         if(gCancel)
@@ -450,6 +476,7 @@ static void DecideGrouping(const TrackNode& track)
 {
     track.mGrouping[0] = '\0';
 
+#ifdef ENABLE_GROUPING
     if(track.mMixed)
     {
         return;
@@ -487,6 +514,7 @@ static void DecideGrouping(const TrackNode& track)
 
         return;
     }
+#endif // ENABLE_GROUPING
 }
 
 void DependencyGraph::TagTracks()
@@ -545,9 +573,14 @@ void DependencyGraph::TagTracks()
         track.mTime = newTime;
         
         // Now that we know the track's genres we should make the appropriate links:
-        AddGenreConnections(track);
-        AddGroupingConnections(track);
-        
+#ifdef SKIP_VINYL_LINKS
+        if(track.mOriginalFormat != OF_VINYL)
+        {
+            AddGenreConnections(track);
+            AddGroupingConnections(track);
+        }
+#endif
+
         gProgress += progressPerTrack;
     }
 
@@ -655,6 +688,7 @@ void DependencyGraph::ConnectLinkedPlaylists()
 
 void DependencyGraph::ConnectMergedPlaylists()
 {
+#ifdef ENABLE_MERGED_PLAYLISTS
     for(size_t curDepth = mDepth; curDepth > 0; --curDepth)
     {
         for(PlaylistNodeSet::iterator i = mPlaylistNodes.begin(); i != mPlaylistNodes.end(); ++i)
@@ -691,6 +725,7 @@ void DependencyGraph::ConnectMergedPlaylists()
             AddPlaylistConnections(playlist);
         }
     }
+#endif // ENABLE_MERGED_PLAYLISTS
 }
 
 void DependencyGraph::WriteLeafPlaylists()
@@ -734,9 +769,10 @@ void DependencyGraph::WriteLeafPlaylists()
             continue;
         }
         
+#ifdef ENABLE_PLAYLISTS        
         gTask = String("Creating ") + playlist.mName;
-        
         WritePlaylist(playlist);
+#endif
 
         playlist.mTime = newTime;
 
@@ -821,12 +857,13 @@ void DependencyGraph::MakeLinks()
 
         const TrackLinkNode& link = *i;
         
-        if(!link.mTime.dwLowDateTime && link.mTime.dwHighDateTime && link.mSource)
+        if(!link.mTime.dwLowDateTime && !link.mTime.dwHighDateTime && link.mSource)
         {
             ++dirtyLinks;
         }
     }
-    
+
+#ifdef ENABLE_PLAYLISTS
     for(PlaylistLinkNodeSet::iterator i = mPlaylistLinkNodes.begin(); i != mPlaylistLinkNodes.end(); ++i)
     {
         if(gCancel)
@@ -842,6 +879,13 @@ void DependencyGraph::MakeLinks()
         }
         
         ++dirtyLinks;
+    }
+#endif
+
+    if(!dirtyLinks)
+    {
+        gProgress = 1.f;
+        return;
     }
     
     float progressPerLink = 1.f / static_cast<float>(dirtyLinks);
@@ -872,6 +916,7 @@ void DependencyGraph::MakeLinks()
         gProgress += progressPerLink;
     }
 
+#ifdef ENABLE_PLAYLISTS
     for(PlaylistLinkNodeSet::iterator i = mPlaylistLinkNodes.begin(); i != mPlaylistLinkNodes.end(); ++i)
     {
         if(gCancel)
@@ -894,7 +939,8 @@ void DependencyGraph::MakeLinks()
 
         gProgress += progressPerLink;
     }
-            
+#endif
+
     gProgress = 1.f;
 }
 
@@ -946,9 +992,10 @@ void DependencyGraph::WriteMergedPlaylists()
                 continue;
             }
 
+#ifdef ENABLE_PLAYLISTS        
             gTask = String("Creating ") + playlist.mName;
-            
             WritePlaylist(playlist);
+#endif
 
             playlist.mTime = newTime;
 
