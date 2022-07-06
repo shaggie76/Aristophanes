@@ -15,6 +15,7 @@ static const char* GetFormatString(OriginalFormat of)
         case OF_CD:     return("CD");
         case OF_MP3:    return("MP3");
         case OF_DVD:    return("DVD");
+        case OF_BLURAY: return("Bluray");
         default:        Assert(!"Unknown format!"); return("Somewhere");
     }
 }
@@ -184,6 +185,8 @@ void UpdateTag(const TrackNode& track)
     delete[] encodedBy;
     delete[] genre;
 }
+
+#pragma warning( disable: 5205 )  /* delete of an abstract class */
 
 void PrintInformation(const ID3_Tag &myTag)
 {

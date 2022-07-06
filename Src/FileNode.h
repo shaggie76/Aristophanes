@@ -13,7 +13,8 @@ enum OriginalFormat
     OF_VINYL,
     OF_CD,
     OF_MP3,
-    OF_DVD
+    OF_DVD,
+    OF_BLURAY
 };
 
 struct FileNode

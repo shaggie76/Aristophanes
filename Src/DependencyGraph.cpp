@@ -69,15 +69,15 @@ DependencyGraph::DependencyGraph(const String& rootDir, IiTunes* iTunes) :
     
     // UnMixed TrackNode: M:\By Label\Eye-Q Records\Various\1995 - Unmixed - Behind The Eye (Volume 2) [CD]\01 - Virtual Symmetry - The VS.mp3
     // <Label> <Year> <Album Title> <format> <track index> <track artist> <track title>
-    CompileRE(mUnMixedTrackRE, mUnMixedTrackREE,  "^" + escapedRootDir + "\\\\By Label\\\\([^\\\\]*)\\\\Various\\\\(\\d{4}) - Unmixed - (.*) \\[(CD|DVD|Vinyl|MP3)\\]\\\\(\\d{2}) - (.*) - (.*)\\.mp3$");
+    CompileRE(mUnMixedTrackRE, mUnMixedTrackREE,  "^" + escapedRootDir + "\\\\By Label\\\\([^\\\\]*)\\\\Various\\\\(\\d{4}) - Unmixed - (.*) \\[(CD|DVD|Bluray|Vinyl|MP3)\\]\\\\(\\d{2}) - (.*) - (.*)\\.mp3$");
     
     // Mixed TrackNode: M:\By Label\United Records\Various\2000 - Armin van Buuren - 001 - A State of Trance [CD]\01 - Miller & Floyd - Colours (Humate Remix).mp3
     // <Label> <Year> <DJ> <Album Title> <format> <track index> <track artist> <track title>
-    CompileRE(mMixedTrackRE, mMixedTrackREE,  "^" + escapedRootDir + "\\\\By Label\\\\([^\\\\]*)\\\\Various\\\\(\\d{4}) - (.*) - (.*) \\[(CD|DVD|Vinyl|MP3)\\]\\\\(\\d{2}) - (.*) - (.*)\\.mp3$");
+    CompileRE(mMixedTrackRE, mMixedTrackREE,  "^" + escapedRootDir + "\\\\By Label\\\\([^\\\\]*)\\\\Various\\\\(\\d{4}) - (.*) - (.*) \\[(CD|DVD|Bluray|Vinyl|MP3)\\]\\\\(\\d{2}) - (.*) - (.*)\\.mp3$");
 
     // Normal TrackNode: M:\By Label\A&M Records\DJ Shadow\2002 - The Private Press [CD]\01 - (Letter From Home).mp3
     // <Label> <Year> <Artist> <Album Title> <format> <track index> <track title>
-    CompileRE(mNormalTrackRE, mNormalTrackREE, "^" + escapedRootDir + "\\\\By Label\\\\([^\\\\]*)\\\\([^\\\\]*)\\\\(\\d{4}) - (.*) \\[(CD|DVD|Vinyl|MP3)\\]\\\\(\\d{2}) - (.*)\\.mp3$");
+    CompileRE(mNormalTrackRE, mNormalTrackREE, "^" + escapedRootDir + "\\\\By Label\\\\([^\\\\]*)\\\\([^\\\\]*)\\\\(\\d{4}) - (.*) \\[(CD|DVD|Bluray|Vinyl|MP3)\\]\\\\(\\d{2}) - (.*)\\.mp3$");
 
     // Playlist: M:\By Label\A&M Records\DJ Shadow\2002 - The Private Press [CD]\00 - DJ Shadow - The Private Press [2002].m3u
     //           M:\By Label\A&M Records\DJ Shadow\All.m3u
@@ -87,8 +87,8 @@ DependencyGraph::DependencyGraph(const String& rootDir, IiTunes* iTunes) :
     //           M:\By Label\CD.m3u
     //           M:\By Genre\Vinyl.m3u
     
-    CompileRE(mPlaylistRE1, mPlaylistREE1, "^" + rootDir + "\\\\By Label\\\\.*\\[(CD|DVD|Vinyl|MP3)\\]\\\\00 - .*\\.m3u$");
-    CompileRE(mPlaylistRE2, mPlaylistREE2, ".*\\\\(CD|DVD|Vinyl|MP3|All).m3u$");
+    CompileRE(mPlaylistRE1, mPlaylistREE1, "^" + rootDir + "\\\\By Label\\\\.*\\[(CD|DVD|Bluray|Vinyl|MP3)\\]\\\\00 - .*\\.m3u$");
+    CompileRE(mPlaylistRE2, mPlaylistREE2, ".*\\\\(CD|DVD|Bluray|Vinyl|MP3|All).m3u$");
     
     // TrackNode Link: M:\By Artist\ADSR\1994 - Primary\01 - Windswept.mp3
     CompileRE(mTrackLinkRE, mTrackLinkREE, "^" + rootDir + "\\\\By (Artist|Album|Genre)\\\\.*\\.mp3$");
@@ -431,6 +431,7 @@ void DependencyGraph::ConnectGraph()
 #endif
     }
     
+    /*
     for(TrackLinkNodeSet::iterator i = mTrackLinkNodes.begin(); i != mTrackLinkNodes.end(); ++i)
     {
         if(gCancel)
@@ -470,6 +471,7 @@ void DependencyGraph::ConnectGraph()
         
         link.mSource = static_cast<const PlaylistNode*>(*f);
     }
+    */
 }
 
 static void DecideGrouping(const TrackNode& track)
@@ -1483,8 +1485,9 @@ void DependencyGraph::ParseFile(const ScanFile& scanFile)
         Assert(pcre_copy_substring(scanFile.mName, ovector, matches, token++, newNode.mTrackName, ARRAY_COUNT(newNode.mTrackName)) > 0); 
 
         const TrackNode* nodePtr = &*(mTrackNodes.insert(newNode).first);
-        DebugAssert(mTracksByNameSize.find(nodePtr) == mTracksByNameSize.end());
-        mTracksByNameSize.insert(nodePtr);
+        Assert(nodePtr);
+        // DebugAssert(mTracksByNameSize.find(nodePtr) == mTracksByNameSize.end());
+        // mTracksByNameSize.insert(nodePtr);
 
         return;
     }
@@ -1541,8 +1544,9 @@ void DependencyGraph::ParseFile(const ScanFile& scanFile)
         Assert(pcre_copy_substring(scanFile.mName, ovector, matches, token++, newNode.mTrackName, ARRAY_COUNT(newNode.mTrackName)) > 0); 
 
         const TrackNode* nodePtr = &*(mTrackNodes.insert(newNode).first);
-        DebugAssert(mTracksByNameSize.find(nodePtr) == mTracksByNameSize.end());
-        mTracksByNameSize.insert(nodePtr);
+        Assert(nodePtr);
+        // DebugAssert(mTracksByNameSize.find(nodePtr) == mTracksByNameSize.end());
+        // mTracksByNameSize.insert(nodePtr);
 
         return;
     }
@@ -1581,6 +1585,10 @@ void DependencyGraph::ParseFile(const ScanFile& scanFile)
         {
             newNode.mOriginalFormat = OF_DVD;
         }
+        else if(Str::Compare(formatBuffer, "Bluray") == 0)
+        {
+            newNode.mOriginalFormat = OF_BLURAY;
+        }
         else if(Str::Compare(formatBuffer, "Vinyl") == 0)
         {
             newNode.mOriginalFormat = OF_VINYL;
@@ -1600,8 +1608,9 @@ void DependencyGraph::ParseFile(const ScanFile& scanFile)
         Assert(pcre_copy_substring(scanFile.mName, ovector, matches, token++, newNode.mTrackName, ARRAY_COUNT(newNode.mTrackName)) > 0); 
 
         const TrackNode* nodePtr = &*(mTrackNodes.insert(newNode).first);
-        DebugAssert(mTracksByNameSize.find(nodePtr) == mTracksByNameSize.end());
-        mTracksByNameSize.insert(nodePtr);
+        Assert(nodePtr);
+        // DebugAssert(mTracksByNameSize.find(nodePtr) == mTracksByNameSize.end());
+        // mTracksByNameSize.insert(nodePtr);
 
         return;
     }
@@ -1653,11 +1662,12 @@ void DependencyGraph::ParseFile(const ScanFile& scanFile)
         }
         
         const PlaylistNode* nodePtr = &*(mPlaylistNodes.insert(newNode).first);
+        Assert(nodePtr);
 
         if(newNode.mLeafNode)
         {
-            DebugAssert(mPlaylistsByNameSize.find(nodePtr) == mPlaylistsByNameSize.end());
-            mPlaylistsByNameSize.insert(nodePtr);
+            // DebugAssert(mPlaylistsByNameSize.find(nodePtr) == mPlaylistsByNameSize.end());
+            // mPlaylistsByNameSize.insert(nodePtr);
         }
         
         mDepth = std::max(mDepth, newNode.mDepth);
