@@ -20,6 +20,8 @@
 #define CONTROL_FILE                    1011
 #define CONTROL_REBUILD_LIBRARY         1012
 #define CONTROL_UPDATE_LIBRARY          1013
+#define IDC_STATIC                      -1
+
 
 // Next default values for new objects
 // 
