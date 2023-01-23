@@ -332,12 +332,13 @@ struct Phase2
     {
         dependencyGraph->TagTracks();
         dependencyGraph->UpdateITunesDatabase();
-        dependencyGraph->ConnectLinkedPlaylists();
-        dependencyGraph->ConnectMergedPlaylists();
-        dependencyGraph->WriteLeafPlaylists();
-        dependencyGraph->MakeDirs();
-        dependencyGraph->MakeLinks();
-        dependencyGraph->WriteMergedPlaylists();
+        // DISABLING
+        // dependencyGraph->ConnectLinkedPlaylists();
+        // dependencyGraph->ConnectMergedPlaylists();
+        // dependencyGraph->WriteLeafPlaylists();
+        // dependencyGraph->MakeDirs();
+        // dependencyGraph->MakeLinks();
+        // dependencyGraph->WriteMergedPlaylists();
     }
 };
 
