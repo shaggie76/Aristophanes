@@ -103,13 +103,10 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         rootDirs.push_back("C:\\Music\\Glen's Music");
         rootDirs.push_back("C:\\Music\\Erin's Music");
     }
-    else if(DirExists("M:\\By Label"))
+    else if(DirExists("D:\\Music"))
     {
-        rootDirs.push_back("M:\\");
-    }
-    else if(DirExists("P:\\Music\\By Label"))
-    {
-        rootDirs.push_back("P:\\Music");
+        rootDirs.push_back("D:\\Music\\Glen's Music");
+        rootDirs.push_back("D:\\Music\\Erin's Music");
     }
     else if
     (
@@ -120,10 +117,18 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         rootDirs.push_back("C:\\Glen's Music");
         rootDirs.push_back("C:\\Erin's Music");
     }
+    else if
+    (
+        DirExists("P:\\Glen's Music") &&
+        DirExists("P:\\Erin's Music")
+    )
+    {
+        rootDirs.push_back("P:\\Glen's Music");
+        rootDirs.push_back("P:\\Erin's Music");
+    }
     else
     {
-        rootDirs.push_back("M:\\Glen's Music");
-        rootDirs.push_back("M:\\Erin's Music");
+        return(1);
     }
     
     IiTunes* iTunes = NULL;
