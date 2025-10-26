@@ -4,9 +4,6 @@
 #include "Tag.h"
 #include "iTunes.h"
 
-// Vestial stuff for FinalScratch
-// #define ENABLE_GROUPING
-
 // define ENABLE_PLAYLISTS
 
 // #define ENABLE_BY_ARTIST
@@ -474,51 +471,6 @@ void DependencyGraph::ConnectGraph()
     */
 }
 
-static void DecideGrouping(const TrackNode& track)
-{
-    track.mGrouping[0] = '\0';
-
-#ifdef ENABLE_GROUPING
-    if(track.mMixed)
-    {
-        return;
-    }
-
-    if(Str::Find(track.mGenre, "Trance/") == track.mGenre)
-    {
-        size_t minRating = 3;
-        
-        if(Str::Compare(track.mGenre, "Trance/Classic Trance") == 0)
-        {
-            minRating = 4;
-        }
-        else if(Str::Compare(track.mGenre, "Trance/Club Trance") == 0)
-        {
-            minRating = 4;
-        }
-
-        if(track.mRating >= minRating)
-        {
-            Str::Copy(track.mGrouping, ARRAY_COUNT(track.mGrouping), "Mixable/Trance");
-        }
-    
-        return;
-    }
-
-    if(Str::Compare(track.mGenre, "House/Techno") == 0)
-    {
-        size_t minRating = 3;
-        
-        if(track.mRating >= minRating)
-        {
-            Str::Copy(track.mGrouping, ARRAY_COUNT(track.mGrouping), "Mixable/Techno");
-        }
-
-        return;
-    }
-#endif // ENABLE_GROUPING
-}
-
 void DependencyGraph::TagTracks()
 {
     gProgress = 0.f;
@@ -570,7 +522,6 @@ void DependencyGraph::TagTracks()
         
         LoadITunes(track);
         UpdateTag(track);
-        DecideGrouping(track);
         
         track.mTime = newTime;
         
@@ -579,7 +530,6 @@ void DependencyGraph::TagTracks()
         if(track.mOriginalFormat != OF_VINYL)
         {
             AddGenreConnections(track);
-            AddGroupingConnections(track);
         }
 #endif
 
@@ -1179,89 +1129,6 @@ void DependencyGraph::AddGenreConnections(const TrackNode& track)
     byGenrePlaylistLink.mSource = track.mPlaylist;
 }
 
-static int CompareQuality(const TrackNode* a, const TrackNode* b)
-{
-    if(a->mRating < b->mRating)
-    {
-        return(-1);
-    }
-    
-    if(a->mRating > b->mRating)
-    {
-        return(1);
-    }
-    
-    if(a->mOriginalFormat < b->mOriginalFormat)
-    {
-        return(-1);
-    }
-
-    if(a->mOriginalFormat > b->mOriginalFormat)
-    {
-        return(1);
-    }
-    
-    if(a->mDuration < b->mDuration)
-    {
-        return(-1);
-    }
-    
-    if(a->mDuration > b->mDuration)
-    {
-        return(1);
-    }
-    
-    return(0);
-}
-
-void DependencyGraph::AddGroupingConnections(const TrackNode& track)
-{
-    if(!track.mGrouping[0])
-    {
-        return;
-    }
-
-    char groupDir[MAX_PATH];
-    Str::Print(groupDir, ARRAY_COUNT(groupDir), "%s\\%s", mRootDir.c_str(), track.mGrouping);
-    MakeDirNodes(groupDir);
-    
-    for(size_t i = 0; groupDir[i]; ++i)
-    {
-        if(groupDir[i] == '/')
-        {
-            groupDir[i] = '\\';
-        }
-    }
-
-    char byGroupTrackName[MAX_PATH];
-    size_t chars = Str::Copy(byGroupTrackName, ARRAY_COUNT(byGroupTrackName), groupDir);
-    chars += Str::Copy(byGroupTrackName + chars, ARRAY_COUNT(byGroupTrackName) - chars, "\\");
-    chars += Str::Copy(byGroupTrackName + chars, ARRAY_COUNT(byGroupTrackName) - chars, track.mTrackArtist);
-    chars += Str::Copy(byGroupTrackName + chars, ARRAY_COUNT(byGroupTrackName) - chars, " - ");
-    chars += Str::Copy(byGroupTrackName + chars, ARRAY_COUNT(byGroupTrackName) - chars, track.mTrackName);
-    chars += Str::Copy(byGroupTrackName + chars, ARRAY_COUNT(byGroupTrackName) - chars, ".mp3");
-    
-    // Note that since we're collapsing the file names here we need to do a thorough search
-    // because some track names will be equivalent in a case-insensitive manner.
-    const TrackLinkNode& byGroupTrackLink = GetTrackLinkEx(byGroupTrackName);
- 
-    byGroupTrackLink.mSkipAlbumPlaylist = true;
-    
-    if(byGroupTrackLink.mSource)
-    {
-        int c = CompareQuality(byGroupTrackLink.mSource, &track);
-        
-        if(c >= 0)
-        {
-            return;
-        }
-        
-        byGroupTrackLink.mSource->mGrouping[0] = '\0';
-    }
-    
-    byGroupTrackLink.mSource = &track;
-}
-
 void DependencyGraph::AddPlaylistConnections(const PlaylistNode& playlist)
 {
     size_t chars;
@@ -1771,8 +1638,18 @@ void DependencyGraph::UpdateITunes(const TrackNode& track)
 
     track.mIITTrack->put_Composer(MakeBStr(track.mAlbumArtist));
     track.mIITTrack->put_Album(MakeBStr(track.mAlbumTitle));
-    
-    track.mIITTrack->put_Grouping(MakeBStr(track.mGrouping));
+
+    const char* grouping = "";
+    switch(track.mOriginalFormat)
+    {
+        case OF_ASSORTED:   grouping = "Assorted"; break;
+        case OF_VINYL:      grouping = "Vinyl"; break;
+        case OF_CD:         grouping = "CD"; break;
+        case OF_MP3:        grouping = "MP3"; break;
+        case OF_DVD:        grouping = "DVD"; break;
+        case OF_BLURAY:     grouping = "Blu-ray"; break;
+    }
+    track.mIITTrack->put_Grouping(MakeBStr(grouping));
 
     track.mIITTrack->put_Genre(MakeBStr(track.mGenre));
     track.mIITTrack->put_Rating(static_cast<long>(track.mRating * 20));

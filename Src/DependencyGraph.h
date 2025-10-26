@@ -48,7 +48,6 @@ protected:
     void AddArtistConnections(const TrackNode& track);
     void AddAlbumConnections(const TrackNode& track);
     void AddGenreConnections(const TrackNode& track);
-    void AddGroupingConnections(const TrackNode& track);
     void AddPlaylistConnections(const PlaylistNode& playlist);
 
     const PlaylistNode& GetPlaylist(const char* fileName, OriginalFormat originalFormat);

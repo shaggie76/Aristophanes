@@ -73,7 +73,6 @@ struct TrackNode : public TrackInterface
     mutable size_t              mDuration;
     
     mutable char                mGenre[MAX_PATH];
-    mutable char                mGrouping[MAX_PATH];
 
     mutable size_t              mRating;
     

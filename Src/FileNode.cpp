@@ -96,7 +96,6 @@ TrackNode::TrackNode(const char* name, const FILETIME& time, const QWORD& size) 
     Util::Zeroize(mTrackArtist, sizeof(mTrackArtist));
     Util::Zeroize(mTrackName, sizeof(mTrackName));
     Util::Zeroize(mGenre, sizeof(mGenre));
-    Util::Zeroize(mGrouping, sizeof(mGrouping));
 }
 
 TrackNode::TrackNode(const char* name) :
@@ -118,7 +117,6 @@ TrackNode::TrackNode(const char* name) :
     Util::Zeroize(mTrackArtist, sizeof(mTrackArtist));
     Util::Zeroize(mTrackName, sizeof(mTrackName));
     Util::Zeroize(mGenre, sizeof(mGenre));
-    Util::Zeroize(mGrouping, sizeof(mGrouping));
 }
 
 TrackNode::~TrackNode()
